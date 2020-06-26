@@ -483,7 +483,7 @@ removeClass = true;
 });
 </script> -->
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 $.ajax({
     cache: false,
     type: "GET",
@@ -494,4 +494,4 @@ $.ajax({
 
     }
 });
-</script>
+</script> -->
