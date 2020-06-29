@@ -483,15 +483,21 @@ removeClass = true;
 });
 </script> -->
 
-<!-- <script type="text/javascript">
+<script type="text/javascript">
 $.ajax({
     cache: false,
     type: "GET",
     dataType: "json",
+    // url: "http://dummy.restapiexample.com/api/v1/employees",
     url: "http://103.79.221.146:5019/api/tracks/getall",
+    // config: {
+    //   headers: {
+    //     'Access-Control-Allow-Origin': '*',
+    //   }
+    // },
     success: function(data){
       console.log(data);
 
     }
 });
-</script> -->
+</script>

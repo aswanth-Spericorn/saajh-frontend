@@ -149,19 +149,19 @@ get_header();
                </div>
            </div>
        </div>
-        <div class="music-track-table">
-            <div class="custom-container container">
-                <div class="tunes-tracking">
-                    <div class="track-heading">
-                        <div></div>
-                        <div>Time</div>
-                        <div>Track &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</div>
-                        <div>Filename &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</div>
-                        <div>Key</div>
-                        <div>Raag/Scale</div>
-                        <div>BPM</div>
-                        <div></div>
-                    </div>
+       <div class="music-track-table">
+           <div class="custom-container container">
+               <div class="tunes-tracking">
+                   <div class="track-heading">
+                       <div class="thump"></div>
+                       <div class="time">Time</div>
+                       <div class="trck">Track </div>
+                       <div class="filename">Filename </div>
+                       <div class="key">Key</div>
+                       <div class="raag-scale">Raag/Scale</div>
+                       <div class="bpm">BPM</div>
+                       <div></div>
+                   </div>
                     <div class="song-track">
                         <div>
                             <img src="<?php echo get_template_directory_uri().'/images/thump-img.jpg';?>" alt="">
