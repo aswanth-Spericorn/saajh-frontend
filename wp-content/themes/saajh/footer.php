@@ -306,6 +306,22 @@ Launch demo modal
 
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script type="text/javascript">
+var base_url = window.location.origin;
+$.ajax({
+    cache: false,
+    type: "GET",
+    dataType: "json",
+    url: "http://103.79.221.146:5019/api/tracks/getall",
+    success: function(data){
+      data.forEach(function(track){
+        console.log(data)
+        $('.list-tracks').append("<div class='song-track'><div><img src='' alt=''></div><div class='time-t'><p class='time-duration'>  "+track.durationMin+":"+track.durationSec+" </p><button id='play'  class='centre play'></button></div><div class='audio-track'><img class='img-fluid' src='' alt=''></div><div class='tune-name'><p>"+track.name+"</p><div class='un-btn d-flex'><p>oneshot</p><p>vocals</p><p>hip hop</p><p>trap</p><p>chants</p></div></div><div class='content-style'><p>"+track.key+"</p></div><div class='content-style'><p>"+track.raga+"</p></div><div class='content-style'><p>141</p></div><div class='d-flex i-icons'><div class='fav'><img src='"+base_url+"/wp-content/themes/saajh/images/favort.svg' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/d-arrow.png' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/dots.png' alt=''></div></div></div>");
+      });
+    }
+});
+</script>
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
  integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
 crossorigin="anonymous"></script>
@@ -482,22 +498,3 @@ $(".dropdown-content").removeClass('open');
 removeClass = true;
 });
 </script> -->
-
-<script type="text/javascript">
-$.ajax({
-    cache: false,
-    type: "GET",
-    dataType: "json",
-    // url: "http://dummy.restapiexample.com/api/v1/employees",
-    url: "http://103.79.221.146:5019/api/tracks/getall",
-    // config: {
-    //   headers: {
-    //     'Access-Control-Allow-Origin': '*',
-    //   }
-    // },
-    success: function(data){
-      console.log(data);
-
-    }
-});
-</script>
