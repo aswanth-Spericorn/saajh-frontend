@@ -306,8 +306,26 @@ Launch demo modal
 
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+
+<script>
+
+// $(document).on("click",".play",function() {
+//   alert('click');
+//   var id = this.id;
+//   var x = document.getElementById("audio"+id);
+//   // console.log(x)
+//   x.play();
+// });
+</script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+ integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+crossorigin="anonymous"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/2.0.5/wavesurfer.min.js"></script>
 <script type="text/javascript">
 var base_url = window.location.origin;
+var wavesurfer = [];
 $.ajax({
     cache: false,
     type: "GET",
@@ -315,18 +333,52 @@ $.ajax({
     url: "http://103.79.221.146:5019/api/tracks/getall",
     success: function(data){
       data.forEach(function(track){
-        console.log(data)
-        $('.list-tracks').append("<div class='song-track'><div><img src='' alt=''></div><div class='time-t'><p class='time-duration'>  "+track.durationMin+":"+track.durationSec+" </p><button id='play'  class='centre play'></button></div><div class='audio-track'><img class='img-fluid' src='' alt=''></div><div class='tune-name'><p>"+track.name+"</p><div class='un-btn d-flex'><p>oneshot</p><p>vocals</p><p>hip hop</p><p>trap</p><p>chants</p></div></div><div class='content-style'><p>"+track.key+"</p></div><div class='content-style'><p>"+track.raga+"</p></div><div class='content-style'><p>141</p></div><div class='d-flex i-icons'><div class='fav'><img src='"+base_url+"/wp-content/themes/saajh/images/favort.svg' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/d-arrow.png' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/dots.png' alt=''></div></div></div>");
-      });
+        waveid = "waveform"+track.id;
+
+
+          console.log(data)
+            // $('.list-tracks').append("<audio controls='controls' src='"+base_url+"/saajh/wp-content/themes/saajh/images/file_example.mp3'>Your browser does not support the HTML5 audio element.</audio>");
+          $('.list-tracks').append("<div class='song-track'><div><img src='"+base_url+"/saajh/wp-content/themes/saajh/images/thump-img.jpg' alt=''></div><div class='time-t'><p class='time-duration'>  "+track.durationMin+":"+track.durationSec+" </p><button id='play' value="+track.id+" class='centre play'></button></div> <div class='audio-track'><div id='"+waveid+"'></div> </div> <div class='tune-name'><p>"+track.orgName+"</p><div class='un-btn d-flex'><p>oneshot</p><p>vocals</p><p>hip hop</p><p>trap</p><p>chants</p></div></div><div class='content-style'><p>"+track.key+"</p></div><div class='content-style'><p>"+track.raga+"</p></div><div class='content-style'><p>141</p></div><div class='d-flex i-icons'><div class='fav'><img src='"+base_url+"/wp-content/themes/saajh/images/favort.svg' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/d-arrow.png' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/dots.png' alt=''></div></div></div>");
+
+          // http://103.79.221.146:5019/api/tracks/mp3/:"+track.id+"  file_example.mp3
+          // "+base_url+"/saajh/wp-content/themes/saajh/images/file_example.mp3
+
+          // alert('loaded')
+
+
+              wavesurfer[track.id]= WaveSurfer.create({
+              //container: '#waveform',
+              container: document.querySelector('#'+waveid),
+              waveColor: '#ababab',
+              progressColor: '#ffa180',
+              barHeight: 1.7
+          });
+          wavesurfer[track.id].load("http://103.79.221.146:5019/api/tracks/mp3/"+track.id);
+
+        });
+
+          $(document).on("click",".play,.pause",function() {
+            var tid = this.value;
+              wavesurfer[tid].playPause();
+
+              $( this).css( "display", "block" );
+              $( this).prev().css( "display", "none" );
+
+              if(this.className  === 'play'){
+                  this.className = "pause";
+              }else{
+                  this.className = "play";
+              }
+
+              // wavesurfer[tid].load("http://103.79.221.146:5019/api/tracks/mp3/"+tid);
+            });
+
+            // wavesurfer[track.id].load('https://ia800508.us.archive.org/15/items/LoveThemeFromTheGodfather/02LoveThemeFromTheGodfather.mp3');
+
     }
 });
 </script>
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
- integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-crossorigin="anonymous"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.js'></script>
-<script src="https://unpkg.com/wavesurfer.js"></script>
 <script>
     $(function () {
       // For each image with an SVG class, execute the following function.
@@ -433,41 +485,38 @@ $("#ex2").slider({});
 // Without JQuery
 //var slider = new Slider('#ex2', {});
 </script>
+<!-- play track  -->
 <script>
-    var wavesurfer = WaveSurfer.create({
-        //container: '#waveform',
-        container: document.querySelector('#waveform'),
-        waveColor: '#ababab',
-        progressColor: '#ffa180',
-        barHeight: 1.7
-    });
+  // alert('play')
+    //
+    // var wavesurfer = WaveSurfer.create({
+    //     //container: '#waveform',
+    //     container: document.querySelector('#waveform'),
+    //     waveColor: '#ababab',
+    //     progressColor: '#ffa180',
+    //     barHeight: 1.7
+    // });
 
-    play.addEventListener('click', function() {
+</script>
+<script>
 
-        wavesurfer.playPause();
-
-        $( this).css( "display", "block" );
-        $( this).prev().css( "display", "none" );
-
-        if(this.className  === 'play'){
-            this.className = "pause";
-        }else{
-            this.className = "play";
-        }
-
-      });
-
-wavesurfer.load('https://ia800508.us.archive.org/15/items/LoveThemeFromTheGodfather/02LoveThemeFromTheGodfather.mp3');
-
-
-
-// var wavesurfer = WaveSurfer.create({
-//     //container: '#waveform',
-//     container: document.querySelector('#waveform2'),
-//     waveColor: '#ababab',
-//     progressColor: '#ffa180',
-//     barHeight: 1.7
-// });
+    // play.addEventListener('click', function() {
+    // $(document).on("click",".play",function() {
+    //   var tid = this.value;
+    //
+    //     wavesurfer.playPause();
+    //
+    //     $( this).css( "display", "block" );
+    //     $( this).prev().css( "display", "none" );
+    //
+    //     if(this.className  === 'play'){
+    //         this.className = "pause";
+    //     }else{
+    //         this.className = "play";
+    //     }
+    //
+    //     wavesurfer.load('https://ia800508.us.archive.org/15/items/LoveThemeFromTheGodfather/02LoveThemeFromTheGodfather.mp3');
+    //   });
 </script>
 <!-- <script>
 //  $(document).ready(function() {
