@@ -334,18 +334,12 @@ $.ajax({
     success: function(data){
       data.forEach(function(track){
         waveid = "waveform"+track.id;
-
-
           console.log(data)
             // $('.list-tracks').append("<audio controls='controls' src='"+base_url+"/saajh/wp-content/themes/saajh/images/file_example.mp3'>Your browser does not support the HTML5 audio element.</audio>");
-          $('.list-tracks').append("<div class='song-track'><div><img src='"+base_url+"/saajh/wp-content/themes/saajh/images/thump-img.jpg' alt=''></div><div class='time-t'><p class='time-duration'>  "+track.durationMin+":"+track.durationSec+" </p><button id='play' value="+track.id+" class='centre play'></button></div> <div class='audio-track'><div id='"+waveid+"'></div> </div> <div class='tune-name'><p>"+track.orgName+"</p><div class='un-btn d-flex'><p>oneshot</p><p>vocals</p><p>hip hop</p><p>trap</p><p>chants</p></div></div><div class='content-style'><p>"+track.key+"</p></div><div class='content-style'><p>"+track.raga+"</p></div><div class='content-style'><p>141</p></div><div class='d-flex i-icons'><div class='fav'><img src='"+base_url+"/wp-content/themes/saajh/images/favort.svg' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/d-arrow.png' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/dots.png' alt=''></div></div></div>");
-
+          $('.list-tracks').append("<div class='song-track'><div><img src='"+base_url+"/saajh/wp-content/themes/saajh/images/thump-img.jpg' alt=''></div><div class='time-t'><p class='time-duration'>  "+track.durationMin+":"+track.durationSec+" </p><button id='play"+track.id+"' value="+track.id+" class='centre play'></button></div> <div class='audio-track'><div id='"+waveid+"'></div> </div> <div class='tune-name'><p>"+track.orgName+"</p><div class='un-btn d-flex'><p>oneshot</p><p>vocals</p><p>hip hop</p><p>trap</p><p>chants</p></div></div><div class='content-style'><p>"+track.key+"</p></div><div class='content-style'><p>"+track.raga+"</p></div><div class='content-style'><p>"+track.BPM+"</p></div><div class='d-flex i-icons'><div class='fav'><img src='"+base_url+"/wp-content/themes/saajh/images/favort.svg' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/d-arrow.png' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/dots.png' alt=''></div></div></div>");
           // http://103.79.221.146:5019/api/tracks/mp3/:"+track.id+"  file_example.mp3
           // "+base_url+"/saajh/wp-content/themes/saajh/images/file_example.mp3
-
-          // alert('loaded')
-
-
+          console.log('Loaded')
               wavesurfer[track.id]= WaveSurfer.create({
               //container: '#waveform',
               container: document.querySelector('#'+waveid),
@@ -357,9 +351,32 @@ $.ajax({
 
         });
 
+        localStorage.setItem("lasttrack", '');
           $(document).on("click",".play,.pause",function() {
             var tid = this.value;
+            if(localStorage.getItem("lasttrack") && localStorage.getItem("lasttrack") != tid)
+            {
+              // alert(localStorage.getItem("lasttrack"))
+              wavesurfer[localStorage.getItem("lasttrack")].pause();
+              lastid = (localStorage.getItem("lastid"));
+              var last = document.getElementById(lastid);
+              $( last).css( "display", "block" );
+              $( last).prev().css( "display", "none" );
+
+              if(last.className  === 'play'){
+                  last.className = "pause";
+              }else{
+                  last.className = "play";
+              }
               wavesurfer[tid].playPause();
+              localStorage.setItem("lasttrack", tid);
+              localStorage.setItem("lastid", this.id);
+            }
+            else{
+              wavesurfer[tid].playPause();
+              localStorage.setItem("lasttrack", tid);
+              localStorage.setItem("lastid", this.id);
+            }
 
               $( this).css( "display", "block" );
               $( this).prev().css( "display", "none" );
@@ -369,14 +386,20 @@ $.ajax({
               }else{
                   this.className = "play";
               }
-
-              // wavesurfer[tid].load("http://103.79.221.146:5019/api/tracks/mp3/"+tid);
             });
-
-            // wavesurfer[track.id].load('https://ia800508.us.archive.org/15/items/LoveThemeFromTheGodfather/02LoveThemeFromTheGodfather.mp3');
-
     }
 });
+function getTracks() {
+  $.ajax({
+      cache: false,
+      type: "GET",
+      dataType: "json",
+      url: "http://103.79.221.146:5019/api/tracks/getall",
+      success: function(data){
+      return data.length;
+        }
+    });
+}
 </script>
 
 <script>
