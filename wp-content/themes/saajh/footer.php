@@ -332,14 +332,17 @@ $.ajax({
     dataType: "json",
     url: "http://103.79.221.146:5019/api/tracks/getall",
     success: function(data){
-      data.forEach(function(track){
-        waveid = "waveform"+track.id;
-          console.log(data)
+      data.forEach(function(track){  // function to list tracks
+        waveid = "waveform"+track.id; // frequency chart div id
+          var tag = '';
+          for(i = 0; i < (track.selectedTags).length; i++) // function to list track's tags
+          {
+            tag = tag+"<p>"+track.selectedTags[i] +"</p>";
+          }
             // $('.list-tracks').append("<audio controls='controls' src='"+base_url+"/saajh/wp-content/themes/saajh/images/file_example.mp3'>Your browser does not support the HTML5 audio element.</audio>");
-          $('.list-tracks').append("<div class='song-track'><div><img src='"+base_url+"/wp-content/themes/saajh/images/thump-img.jpg' alt=''></div><div class='time-t'><p class='time-duration'>  "+track.durationMin+":"+track.durationSec+" </p><button id='play"+track.id+"' value="+track.id+" class='centre play'></button></div> <div class='audio-track'><div id='"+waveid+"'></div> </div> <div class='tune-name'><p>"+track.orgName+"</p><div class='un-btn d-flex'><p>oneshot</p><p>vocals</p><p>hip hop</p><p>trap</p><p>chants</p></div></div><div class='content-style'><p>"+track.key+"</p></div><div class='content-style'><p>"+track.raga+"</p></div><div class='content-style'><p>"+track.BPM+"</p></div><div class='d-flex i-icons'><div class='fav'><img src='"+base_url+"/wp-content/themes/saajh/images/favort.svg' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/d-arrow.png' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/dots.png' alt=''></div></div></div>");
-          // http://103.79.221.146:5019/api/tracks/mp3/:"+track.id+"  file_example.mp3
-          // "+base_url+"/saajh/wp-content/themes/saajh/images/file_example.mp3
-          console.log('Loaded')
+          $('.list-tracks').append("<div class='song-track'><div><img src='"+base_url+"/wp-content/themes/saajh/images/thump-img.jpg' alt=''></div><div class='time-t'><p class='time-duration'>  "+track.durationMin+":"+track.durationSec+" </p><button id='play"+track.id+"' value="+track.id+" class='play'></button></div> <div class='audio-track'><div id='"+waveid+"' class='track-form'></div> </div> <div class='tune-name'><p>"+track.orgName+"</p><div class='un-btn d-flex'>"+tag+"</div></div><div class='content-style'><p>"+track.key+"</p></div><div class='content-style'><p>"+track.raga+"</p></div><div class='content-style'><p>"+track.BPM+"</p></div><div class='d-flex i-icons'><div class='fav'><a href='#' data-toggle='modal' data-target='#page-addfavourite'><img class='svg' src='"+base_url+"/wp-content/themes/saajh/images/favort.svg' alt=''></a></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/d-arrow.png' alt=''></div><div><img src='"+base_url+"/wp-content/themes/saajh/images/dots.png' alt=''></div></div></div>");
+
+          console.log(track)
               wavesurfer[track.id]= WaveSurfer.create({
               //container: '#waveform',
               container: document.querySelector('#'+waveid),
@@ -352,40 +355,40 @@ $.ajax({
         });
 
         localStorage.setItem("lasttrack", '');
-          $(document).on("click",".play,.pause",function() {
-            var tid = this.value;
+          $(document).on("click",".play,.pause",function() {  // function for play and pause
+
+            var tid = this.value; // current track id
             if(localStorage.getItem("lasttrack") && localStorage.getItem("lasttrack") != tid)
             {
-              // alert(localStorage.getItem("lasttrack"))
-              wavesurfer[localStorage.getItem("lasttrack")].pause();
+              wavesurfer[localStorage.getItem("lasttrack")].pause(); // to pause currently playing track when try to play another
               lastid = (localStorage.getItem("lastid"));
               var last = document.getElementById(lastid);
-              $( last).css( "display", "block" );
-              $( last).prev().css( "display", "none" );
 
-              if(last.className  === 'play'){
-                  last.className = "pause";
-              }else{
-                  last.className = "play";
-              }
+                // $( last).css( "display", "block" );  // change play button style
+                // $( last).prev().css( "display", "none" );
+                if(last.className  === 'pause'){
+                    last.className = "play";
+                }
+
               wavesurfer[tid].playPause();
               localStorage.setItem("lasttrack", tid);
               localStorage.setItem("lastid", this.id);
             }
             else{
               wavesurfer[tid].playPause();
+
               localStorage.setItem("lasttrack", tid);
               localStorage.setItem("lastid", this.id);
             }
 
-              $( this).css( "display", "block" );
-              $( this).prev().css( "display", "none" );
+            $( this).css( "display", "block" );
+            $( this).prev().css( "display", "none" );
 
-              if(this.className  === 'play'){
-                  this.className = "pause";
-              }else{
-                  this.className = "play";
-              }
+            if(this.className  === 'play'){
+                this.className = "pause";
+            }else{
+                this.className = "play";
+            }
             });
     }
 });
@@ -475,28 +478,42 @@ $(document).click(function() {
 
 });
 
-    $(function() {
+$(function() {
 
-        var de = new DropDown( $('#de') );
+    var de = new DropDown( $('#de') );
 
-        $(document).click(function() {
-            // all dropdowns
-            $('.wrapper-dropdown-3').removeClass('active');
-        });
-
+    $(document).click(function() {
+        // all dropdowns
+        $('.wrapper-dropdown-3').removeClass('active');
     });
 
-    $(function() {
+});
 
-        var df = new DropDown( $('#df') );
+$(function() {
 
-        $(document).click(function() {
-            // all dropdowns
-            $('.wrapper-dropdown-3').removeClass('active');
-        });
+    var df = new DropDown( $('#df') );
 
+    $(document).click(function() {
+        // all dropdowns
+        $('.wrapper-dropdown-3').removeClass('active');
     });
 
+});
+
+</script>
+<script>
+$("#dd").on("click", function(){
+  $('#de').removeClass('active');
+  $('#df').removeClass('active');
+});
+$("#de").on("click", function(){
+  $('#dd').removeClass('active');
+  $('#df').removeClass('active');
+});
+$("#df").on("click", function(){
+  $('#de').removeClass('active');
+  $('#df').removeClass('active');
+});
 </script>
 <script>
     // With JQuery
